@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for react-datepicker */
+.react-datepicker-custom .react-datepicker {
+  font-size: 0.75rem; /* Smaller font size for the whole picker */
+}
+
+.react-datepicker-custom .react-datepicker__month-container {
+  display: flex; /* Make month containers sit in a row */
+  flex-wrap: nowrap; /* Prevent wrapping */
+  margin-right: 0.5rem; /* Space between months */
+}
+
+.react-datepicker-custom .react-datepicker__month {
+  margin: 0; /* Remove default margin */
+}
+
+.react-datepicker-custom .react-datepicker__header {
+  padding-top: 0.5em; /* Adjust header padding */
+}
+
+.react-datepicker-custom .react-datepicker__day-names,
+.react-datepicker-custom .react-datepicker__week {
+  display: flex; /* Ensure days and weekdays are flex items */
+  justify-content: space-around; /* Distribute items evenly */
+}
+
+.react-datepicker-custom .react-datepicker__day-name,
+.react-datepicker-custom .react-datepicker__day,
+.react-datepicker-custom .react-datepicker__time-name {
+  width: 1.5rem; /* Smaller day/weekday cell width */
+  line-height: 1.5rem; /* Smaller day/weekday cell height */
+  font-size: 0.625rem; /* Extra small font for days */
+  margin: 0.1rem; /* Smaller margin around days */
+}
+
+.react-datepicker-custom .react-datepicker__current-month {
+  font-size: 0.875rem; /* Smaller font for current month */
+}
+
+.react-datepicker-custom .react-datepicker__navigation {
+  top: 0.6em; /* Adjust navigation button position */
+}
+
+.react-datepicker-popper {
+  min-width: unset !important; /* Override any min-width set by the popper */
+}
+
+/* Add this to your main CSS file, e.g., index.css or App.css */
+.shadow-green-glow {
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.6), 0 0 30px rgba(0, 255, 0, 0.4);
+}
+
+.shadow-red-glow {
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.6), 0 0 30px rgba(255, 0, 0, 0.4);
+}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reset Admin Session</title>
+</head>
+<body>
+    <h1>Reset Admin Session</h1>
+    <button onclick="clearSession()">Clear Session & Redirect to Login</button>
+    <script>
+        function clearSession() {
+            localStorage.clear();
+            alert('Session cleared! Redirecting to admin login...');
+            window.location.href = '/loginAdmin';
+        }
+        
+        // Auto-clear if page is loaded
+        if (confirm('Clear admin session and redirect to login?')) {
+            clearSession();
+        }
+    </script>
+</body>
+</html>

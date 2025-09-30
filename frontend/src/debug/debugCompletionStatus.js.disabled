@@ -1,0 +1,166 @@
+// Debug script to check completion status and force show Telegram link section
+// Run this in browser console on the bundle page
+
+console.log('🔍 DEBUGGING COMPLETION STATUS');
+console.log('==============================');
+
+// Get current context
+const userPhone = localStorage.getItem('userPhone');
+const currentBundle = localStorage.getItem('currentBundleCustomRoute');
+
+console.log('📱 User phone:', userPhone);
+console.log('📦 Current bundle:', currentBundle);
+
+// Check completion status for all possible key formats
+function checkAllCompletionKeys(baseKey) {
+    const bundleIds = [
+        'trialplan',
+        '68b9dac7dc0ac48040d4c212', 
+        'route_trialplan',
+        ''
+    ];
+    
+    const results = {};
+    
+    bundleIds.forEach(bundleId => {
+        const suffix = bundleId ? `_${bundleId}` : '';
+        const key = `${baseKey}${suffix}`;
+        const value = localStorage.getItem(key);
+        if (value) {
+            results[key] = value;
+        }
+    });
+    
+    return results;
+}
+
+console.log('\n📋 ALL PAYMENT COMPLETION KEYS:');
+const paymentKeys = checkAllCompletionKeys('paymentCompleted');
+console.log(paymentKeys);
+
+console.log('\n📋 ALL KYC COMPLETION KEYS:');
+const kycKeys = checkAllCompletionKeys('kycCompleted');
+console.log(kycKeys);
+
+console.log('\n📋 ALL E-SIGN/DIGIO COMPLETION KEYS:');
+const esignKeys = checkAllCompletionKeys('digioCompleted');
+const esignKeys2 = checkAllCompletionKeys('esignCompleted');
+console.log('Digio keys:', esignKeys);
+console.log('E-Sign keys:', esignKeys2);
+
+// Simulate the getBundleSpecificValue function
+function simulateGetBundleSpecificValue(key) {
+    // Try the current bundle logic
+    const bundleData = window.currentBundleData;
+    
+    // Try multiple possible keys
+    const possibleKeys = [];
+    
+    if (bundleData?.id) {
+        possibleKeys.push(`${key}_${bundleData.id}`);
+    }
+    if (bundleData?._id) {
+        possibleKeys.push(`${key}_${bundleData._id}`);
+    }
+    if (bundleData?.customRoute) {
+        possibleKeys.push(`${key}_${bundleData.customRoute}`);
+    }
+    
+    const path = window.location.pathname;
+    if (path.startsWith('/pc/')) {
+        const route = path.split('/pc/')[1];
+        possibleKeys.push(`${key}_${route}`);
+    }
+    
+    possibleKeys.push(key);
+    
+    console.log(`\n🔍 Checking keys for ${key}:`, possibleKeys);
+    
+    for (const possibleKey of possibleKeys) {
+        const value = localStorage.getItem(possibleKey);
+        if (value) {
+            console.log(`   ✅ Found ${possibleKey}: "${value}"`);
+            return value;
+        } else {
+            console.log(`   ❌ Not found: ${possibleKey}`);
+        }
+    }
+    
+    console.log(`   ❌ ${key} not found in any format`);
+    return null;
+}
+
+// Test the completion check logic
+console.log('\n🧪 TESTING COMPLETION LOGIC:');
+
+if (!userPhone) {
+    console.log('❌ FAILED: No user phone');
+} else {
+    console.log('✅ User phone exists');
+    
+    // Check payment
+    const paymentCompleted = simulateGetBundleSpecificValue('paymentCompleted');
+    const paymentCheck = paymentCompleted && paymentCompleted.toLowerCase() === 'true';
+    console.log(`Payment completed: "${paymentCompleted}" → ${paymentCheck}`);
+    
+    if (!paymentCheck) {
+        console.log('❌ FAILED: Payment not completed');
+    } else {
+        console.log('✅ Payment completed');
+        
+        // Check KYC (if required)
+        const kycCompleted = simulateGetBundleSpecificValue('kycCompleted');
+        const kycCheck = kycCompleted && kycCompleted.toLowerCase() === 'true';
+        console.log(`KYC completed: "${kycCompleted}" → ${kycCheck}`);
+        
+        if (!kycCheck) {
+            console.log('❌ FAILED: KYC not completed');
+        } else {
+            console.log('✅ KYC completed');
+            
+            // Check E-Sign (if required)  
+            const digioCompleted = simulateGetBundleSpecificValue('digioCompleted');
+            const digioCheck = digioCompleted && digioCompleted.toLowerCase() === 'true';
+            console.log(`E-Sign completed: "${digioCompleted}" → ${digioCheck}`);
+            
+            if (!digioCheck) {
+                console.log('❌ FAILED: E-Sign not completed');
+            } else {
+                console.log('✅ ALL STEPS COMPLETED!');
+                console.log('🎯 Should show Telegram link section');
+            }
+        }
+    }
+}
+
+// Force completion for testing
+console.log('\n🔧 FORCE COMPLETION FOR TESTING:');
+console.log('Run this to force all steps as completed and trigger Telegram link:');
+
+window.forceShowTelegramLink = () => {
+    console.log('🚀 Forcing all steps as completed...');
+    
+    const bundleIds = ['trialplan', '68b9dac7dc0ac48040d4c212', 'route_trialplan', ''];
+    
+    bundleIds.forEach(bundleId => {
+        const suffix = bundleId ? `_${bundleId}` : '';
+        localStorage.setItem(`paymentCompleted${suffix}`, 'true');
+        localStorage.setItem(`kycCompleted${suffix}`, 'true'); 
+        localStorage.setItem(`digioCompleted${suffix}`, 'true');
+        console.log(`✅ Set completion flags for bundle: ${bundleId || 'general'}`);
+    });
+    
+    // Force trigger storage event
+    window.dispatchEvent(new Event('storage'));
+    
+    console.log('🔄 Storage event triggered - should now show Telegram link section');
+    
+    // Also generate a test telegram link if none exists
+    if (!localStorage.getItem('telegramLink')) {
+        localStorage.setItem('telegramLink', 'https://t.me/+demo_test_link_12345');
+        console.log('📱 Set test Telegram link');
+    }
+};
+
+console.log('\n💡 QUICK FIX:');
+console.log('Run: forceShowTelegramLink()');

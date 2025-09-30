@@ -1,0 +1,125 @@
+/* 🌀 Beautiful Scrollbar CSS */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: #94a3b8;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #475569;
+}
+
+.dark .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: #64748b;
+}
+
+/* Premium Sidebar Scrollbar */
+.best-sidebar-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #a5b4fc transparent;
+}
+.best-sidebar-scrollbar::-webkit-scrollbar {
+  width: 7px;
+}
+.best-sidebar-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #a5b4fc 0%, #c4b5fd 100%);
+  border-radius: 6px;
+}
+.best-sidebar-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.dark .best-sidebar-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #6366f1 0%, #a78bfa 100%);
+}
+
+/* Global defensive rule to prevent horizontal overflow */
+html, body, #root {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Utility to opt-in on specific containers if needed */
+.no-horizontal-overflow {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Hide horizontal scrollbar in collapsed sidebar */
+.best-sidebar-scrollbar.w-11,
+.best-sidebar-scrollbar.w-11 nav {
+  overflow-x: hidden !important;
+}
+
+/* Hide scrollbar visually for collapsed nav */
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+/* Sidebar custom tooltip */
+.sidebar-tooltip-group {
+  position: relative;
+}
+.sidebar-tooltip-text {
+  pointer-events: none;
+  position: absolute;
+  left: 48px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #111827;
+  color: #fff;
+  font-size: 12px;
+  border-radius: 6px;
+  padding: 4px 10px;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.18);
+  z-index: 9999;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.18s;
+}
+.sidebar-tooltip-group:hover .sidebar-tooltip-text,
+.sidebar-tooltip-group:focus-within .sidebar-tooltip-text {
+  opacity: 1;
+  visibility: visible;
+}
+.sidebar-tooltip-text span {
+  position: absolute;
+  left: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 8px solid #111827;
+}.sidebar-tooltip-group {
+  position: relative;
+  overflow: visible; /* Add this line */
+}
+.sidebar-tooltip-text {
+  z-index: 999999; /* Increase to match JSX */
+}
