@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payment Status Debug</title>
+</head>
+<body>
+    <h1>Payment Status Debug Tool</h1>
+    <div id="debug-output"></div>
+
+    <script>
+        function debugPaymentStatus() {
+            const output = document.getElementById('debug-output');
+            let debugInfo = '<h2>Current Status:</h2>';
+            
+            // Check authentication
+            const userPhone = localStorage.getItem('userPhone');
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+            debugInfo += `<p><strong>User Phone:</strong> ${userPhone || 'Not set'}</p>`;
+            debugInfo += `<p><strong>Is Authenticated:</strong> ${isAuthenticated || 'Not set'}</p>`;
+            
+            // Check bundle data
+            const bundleData = window.currentBundleData;
+            debugInfo += `<p><strong>Bundle Data:</strong> ${bundleData ? 'Available' : 'Not available'}</p>`;
+            if (bundleData) {
+                debugInfo += `<p><strong>Bundle ID:</strong> ${bundleData._id || bundleData.id || 'Not found'}</p>`;
+                debugInfo += `<p><strong>Custom Route:</strong> ${bundleData.customRoute || 'Not found'}</p>`;
+                debugInfo += `<p><strong>Feature Toggles:</strong> ${JSON.stringify(bundleData.featureToggles || {})}</p>`;
+            }
+            
+            // Check localStorage keys
+            debugInfo += '<h2>LocalStorage Payment Keys:</h2>';
+            const allKeys = Object.keys(localStorage);
+            const paymentKeys = allKeys.filter(key => key.includes('paymentCompleted'));
+            if (paymentKeys.length > 0) {
+                paymentKeys.forEach(key => {
+                    debugInfo += `<p><strong>${key}:</strong> ${localStorage.getItem(key)}</p>`;
+                });
+            } else {
+                debugInfo += '<p>No payment completion keys found</p>';
+            }
+            
+            // Check current URL
+            debugInfo += '<h2>URL Information:</h2>';
+            debugInfo += `<p><strong>Current URL:</strong> ${window.location.href}</p>`;
+            debugInfo += `<p><strong>Search Params:</strong> ${window.location.search}</p>`;
+            
+            // Try to check bundle-specific payment status
+            debugInfo += '<h2>Bundle-Specific Status:</h2>';
+            if (bundleData) {
+                const bundleId = bundleData._id || bundleData.id;
+                if (bundleId) {
+                    // Sanitize bundle ID like in the utils
+                    const sanitizedBundleId = bundleId.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 50);
+                    const paymentKey = `paymentCompleted_${sanitizedBundleId}`;
+                    debugInfo += `<p><strong>Expected Key:</strong> ${paymentKey}</p>`;
+                    debugInfo += `<p><strong>Key Value:</strong> ${localStorage.getItem(paymentKey) || 'Not set'}</p>`;
+                }
+            }
+            
+            output.innerHTML = debugInfo;
+        }
+        
+        // Functions to test payment completion
+        function markPaymentComplete() {
+            const bundleData = window.currentBundleData;
+            if (bundleData) {
+                const bundleId = bundleData._id || bundleData.id;
+                if (bundleId) {
+                    const sanitizedBundleId = bundleId.replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 50);
+                    const paymentKey = `paymentCompleted_${sanitizedBundleId}`;
+                    localStorage.setItem(paymentKey, 'true');
+                    alert(`Payment marked complete for key: ${paymentKey}`);
+                    debugPaymentStatus();
+                } else {
+                    alert('No bundle ID found');
+                }
+            } else {
+                alert('No bundle data available');
+            }
+        }
+        
+        function clearPaymentStatus() {
+            const allKeys = Object.keys(localStorage);
+            const paymentKeys = allKeys.filter(key => key.includes('paymentCompleted'));
+            paymentKeys.forEach(key => localStorage.removeItem(key));
+            alert(`Cleared ${paymentKeys.length} payment keys`);
+            debugPaymentStatus();
+        }
+        
+        // Run debug on load and every 2 seconds
+        debugPaymentStatus();
+        setInterval(debugPaymentStatus, 2000);
+    </script>
+    
+    <div style="margin-top: 20px;">
+        <button onclick="markPaymentComplete()">Mark Payment Complete</button>
+        <button onclick="clearPaymentStatus()">Clear Payment Status</button>
+        <button onclick="debugPaymentStatus()">Refresh Debug Info</button>
+    </div>
+</body>
+</html>
