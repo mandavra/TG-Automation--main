@@ -1,0 +1,44 @@
+# Database Configuration
+MONGODB_URI=your_MONGODB_connection_string
+
+# Email Configuration (REQUIRED for Telegram invite links)
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_gmail_app_password
+
+# Alternative SMTP Configuration (if not using Gmail)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your_email@gmail.com
+SMTP_PASS=your_gmail_app_password
+
+# Twilio Configuration (OLD - Can be removed after migration)
+TWILIO_ACCOUNT_SID=your_twilio_account_sid
+TWILIO_AUTH_TOKEN=your_twilio_auth_token
+TWILIO_SERVICE_SID=your_twilio_service_sid
+TWILIO_CONTACT_NO=your_twilio_phone_number
+TWILIO_OTP_CHANNEL=sms
+
+# AmazeSMS Configuration (NEW - Replace Twilio)
+AMAZESMS_USER=vyomResearch
+AMAZESMS_AUTHKEY=928lk7F8tFoQ
+AMAZESMS_SENDER=VYMRSH
+AMAZESMS_ENTITYID=1001612146484297247
+AMAZESMS_TEMPLATEID=1007542138834564545
+
+# Cashfree Configuration
+CASHFREE_BASE_URL=https://sandbox.cashfree.com
+CASHFREE_APP_ID=your_cashfree_app_id
+CASHFREE_SECRET_KEY=your_cashfree_secret_key
+
+# Telegram Bot Configuration
+BOT_TOKEN=your_telegram_bot_token
+CHANNEL_ID=your_telegram_channel_id
+ADMIN_USER_IDS=123456789,987654321
+
+# JWT Configuration
+JWT_SECRET=your_jwt_secret_key
+
+# Server Configuration
+PORT=5000
+NODE_ENV=development 
