@@ -1,0 +1,27 @@
+// This script helps debug what the frontend should be sending
+console.log('🔍 Frontend Debug Helper - Expected Bundle Data');
+console.log('');
+console.log('📋 Available Bundles in Production Database:');
+console.log('   1. Bundle ID: 68b18784332382f6ec9df2e4');
+console.log('      Name: "first group"');
+console.log('      Channels: 1 (Trial 1)');
+console.log('');
+console.log('   2. Bundle ID: 68b234a2d65225563f5f6958'); 
+console.log('      Name: "abc preminum"');
+console.log('      Channels: 1 (Trial 1)');
+console.log('');
+console.log('🎯 Frontend should set window.currentBundleData to:');
+console.log('{');
+console.log('  id: "68b18784332382f6ec9df2e4", // or 68b234a2d65225563f5f6958');
+console.log('  name: "first group",');
+console.log('  featureToggles: { enablePayment: true, enableKYC: true, enableESign: true }');
+console.log('}');
+console.log('');
+console.log('🔧 localStorage should contain:');
+console.log('paymentDetails: {');
+console.log('  "originalDuration": "month", // or "year", "week"');
+console.log('  "planId": "someValidPlanId",');
+console.log('  "orderId": "someOrderId"');
+console.log('}');
+console.log('');
+console.log('✅ With correct data, invite link generation should work!');
